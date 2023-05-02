@@ -4,13 +4,15 @@ import { useEffect, useState } from "react";
 import { login, logout, onUserStateChange } from '../api/firebase';
 import User from "./User";
 import Button from "./ui/Button";
+import { useAuthContext } from "./context/AuthContext";
 
 function Navbar () {
-    const [user, setUser] = useState();
+    const { user, login, logout } = useAuthContext();
+    // const [user, setUser] = useState();
     
-    useEffect(() => {
-        onUserStateChange(setUser);
-    }, [])
+    // useEffect(() => {
+    //     onUserStateChange(setUser);
+    // }, [])
 
     return (
         <header className="flex justify-between border-b border-gray-300 p-2">
@@ -21,7 +23,7 @@ function Navbar () {
 
             <nav className="flex items-center gap-4 font-semibold">
                 <Link to="/products">Products</Link>
-                <Link to="/cart">Carts</Link>
+                {user && <Link to="/cart">Carts</Link>}
                 {user && user.isAdmin && (
                         <Link to="/products/new">
                             New Product
