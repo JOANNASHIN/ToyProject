@@ -8,7 +8,7 @@ export default function User({ user: {photoURL, displayName} }) {
                 src={photoURL} 
                 alt={displayName}
             />
-            <span class='hidden md:block'>{displayName}</span>
+            <span className='hidden md:block'>{displayName}</span>
         </div>
     )
 }

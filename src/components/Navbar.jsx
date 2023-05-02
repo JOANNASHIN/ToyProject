@@ -8,7 +8,10 @@ function Navbar () {
     const [user, setUser] = useState();
     
     useEffect(() => {
-        onUserStateChange(setUser);
+        onUserStateChange(user => {
+            console.log(user);
+            setUser(user);
+        });
     }, [])
 
     return (
@@ -25,9 +28,13 @@ function Navbar () {
                     New Product
                 </Link>
 
-                {user && <User user={user}/>}
+                {user && (
+                    <>
+                        <User user={user}/>
+                        <button onClick={logout}>Logout</button>
+                    </>
+                )}
                 {!user && <button onClick={login}>Login</button>}
-                {user && <button onClick={logout}>Logout</button>}
                 
             </nav>
         </header>
