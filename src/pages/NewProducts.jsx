@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../components/ui/Button';
+import { uploadImage } from '../api/uploader';
 
 function NewProduct() {
     const [product, setProduct] = useState({});
@@ -17,6 +18,10 @@ function NewProduct() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        uploadImage(file)
+            .then(url => {
+                console.log(url, 'url');
+            });
 
 
     }
@@ -38,14 +43,6 @@ function NewProduct() {
                     name="title"
                     value={product.title ?? ''}
                     placeholder='제품명'
-                    required
-                    onChange={handleChange}
-                />
-                <input 
-                    type="number" 
-                    name="price"
-                    value={product.price ?? ''}
-                    placeholder='가격'
                     required
                     onChange={handleChange}
                 />
