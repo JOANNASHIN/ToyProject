@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { v4 as uuid } from 'uuid';
 import { 
     getAuth, 
     signInWithPopup, 
@@ -6,7 +7,8 @@ import {
     signOut, 
     onAuthStateChanged  
 } from 'firebase/auth';
-import { getDatabase, ref, child, get } from 'firebase/database';
+import { getDatabase, ref, child, get, set } from 'firebase/database';
+
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -59,4 +61,18 @@ async function adminUser(user) {
 
             return user;
         })
+}
+
+/**
+ * 제품 등록
+ */
+export async function addNewProduct(product, imageUrl) {
+    const id = uuid();
+    return set(ref(database, `products/${id}`), {
+        ...product,
+        id,
+        price: parseInt(product.price),
+        image: imageUrl,
+        options: product.options?.split(',') ?? []
+    })
 }

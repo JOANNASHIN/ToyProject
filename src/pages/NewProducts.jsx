@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import Button from '../components/ui/Button';
 import { uploadImage } from '../api/uploader';
+import { addNewProduct } from '../api/firebase';
 
 function NewProduct() {
     const [product, setProduct] = useState({});
     const [file, setFile] = useState();
-    
+    const [isUploading, setIsUploading] = useState(false);
+    const [success, setSuccess] = useState('');
+
     const handleChange = (e) => {
         const {name, value, files} = e.target;
 
@@ -18,19 +21,45 @@ function NewProduct() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setIsUploading(true);
         uploadImage(file)
             .then(url => {
                 console.log(url, 'url');
+               
+                //firebase에 URL 추가
+                addNewProduct(product, url)
+                    .then(() => {
+                        setSuccess('성공적으로 제품이 추가되었습니다.');
+                        setTimeout(() => {
+                            setSuccess('');
+                        }, 4000)
+                    });
+            })
+            .finally(() => {
+                setIsUploading(false);
             });
 
 
     }
 
     return (
-        <section>
-            {file && <img src={URL.createObjectURL(file)} alt='local file'/>}
-            <h2>new product</h2>
-            <form onSubmit={handleSubmit}>
+        <section className='w-full text-center'>
+            <h2 className='text-2xl font-bold my-4'>New Product</h2>
+
+            {/* 성공메세지 */}
+            {success && <p className='my-2'>✅{success}</p>}
+
+            {/* 첨부 이미지 미리보기 */}
+            {file && (
+                <img 
+                    src={URL.createObjectURL(file)} 
+                    alt='local file'
+                    className='w-96 mx-auto mb-2'
+                />
+            )}
+
+            {/* 제품 등록 폼 */}
+            <form className='flex flex-col px-12' onSubmit={handleSubmit}>
                 <input 
                     type="file" 
                     accept='image/*'
@@ -78,7 +107,11 @@ function NewProduct() {
                     required
                     onChange={handleChange}
                 />
-                <Button text={'제품 등록하기'}></Button>
+
+                <Button 
+                    text={isUploading? '제품 등록 중' : '제품 등록하기'}
+                    disabled={isUploading}
+                ></Button>
             </form>
         </section>
     )
