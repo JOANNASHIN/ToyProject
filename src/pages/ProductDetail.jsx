@@ -33,7 +33,9 @@ export default function ProductDetail() {
             <p className='mx-12 mt-4 text-gray-700'>{category}</p>
 
             <section className='flex flex-col md:flex-row p-4'>
-                <img className='w-full px-4 basis-7/12' src={image} alt={title} />
+                <figure className='w-full px-4 basis-7/12'>
+                    <img className='w-full' src={image} alt={title} />
+                </figure>
 
                 <div className='w-full basis-5/12 flex-col p-4'>
                     <h2 className='text-3xl font-bold py-2'>
