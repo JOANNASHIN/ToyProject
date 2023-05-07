@@ -1,8 +1,12 @@
+import Banner from "../components/Banner";
+import Products from "../components/Products";
+
 function Home() {
     return (
-        <>
-            Home
-        </>
+        <section>
+            <Banner />
+            <Products />
+        </section>
     )
 }
 
