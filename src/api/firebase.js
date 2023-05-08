@@ -7,7 +7,7 @@ import {
     signOut, 
     onAuthStateChanged  
 } from 'firebase/auth';
-import { getDatabase, ref, child, get, set } from 'firebase/database';
+import { getDatabase, ref, child, get, set, remove } from 'firebase/database';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -89,4 +89,29 @@ export async function getProducts() {
             
             return [];
         })
+}
+
+/**
+ * cart정보 가져오기
+ */
+export async function getCart(userId) {
+    return get(ref(database, `carts/${userId}`))
+        .then(snapshot => {
+            const items = snapshot.val() || {};
+            return Object.values(items);
+        })
+}
+
+/**
+ * cart 업데이트 (추가)
+ */
+export async function updateToCart(userId, product) {
+    return set(ref(database, `carts/${userId}/${product.id}`), product)
+}
+
+/**
+ * cart 상품 삭제
+ */
+export async function removeFromCart(userId, productId) {
+    return remove(ref(database, `carts/${userId}/${userId}/${productId}`))
 }
