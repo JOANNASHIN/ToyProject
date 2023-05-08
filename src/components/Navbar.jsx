@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { login, logout, onUserStateChange } from '../api/firebase';
 import User from "./User";
 import Button from "./ui/Button";
-import { useAuthContext } from "./context/AuthContext";
+import { useAuthContext } from "../context/AuthContext";
+import CartStatus from "./CartStatus";
 
 function Navbar () {
     const { user, login, logout } = useAuthContext();
@@ -23,7 +24,11 @@ function Navbar () {
 
             <nav className="flex items-center gap-4 font-semibold">
                 <Link to="/products">Products</Link>
-                {user && <Link to="/cart">Carts</Link>}
+                {user && 
+                    <Link to="/cart">
+                        <CartStatus />
+                    </Link>
+                }
                 {user && user.isAdmin && (
                         <Link to="/products/new">
                             New Product
