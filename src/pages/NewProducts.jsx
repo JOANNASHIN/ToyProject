@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import Button from '../components/ui/Button';
 import { uploadImage } from '../api/uploader';
 import { addNewProduct } from '../api/firebase';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 function NewProduct() {
     const [product, setProduct] = useState({});
     const [file, setFile] = useState();
     const [isUploading, setIsUploading] = useState(false);
     const [success, setSuccess] = useState('');
+
+    const queryClient = useQueryClient();
+    const addProduct = useMutation(({product, url}) => addNewProduct(product, url), {
+        onSuccess: () => queryClient.invalidateQueries(['products'])
+    });
 
     const handleChange = (e) => {
         const {name, value, files} = e.target;
@@ -24,16 +30,21 @@ function NewProduct() {
         setIsUploading(true);
         uploadImage(file)
             .then(url => {
-                console.log(url, 'url');
+                addProduct.mutate({product, url}, {onSuccess: () => {
+                    setSuccess('성공적으로 제품이 추가되었습니다.');
+                    setTimeout(() => {
+                        setSuccess('');
+                    }, 4000)
+                }})
                
                 //firebase에 URL 추가
-                addNewProduct(product, url)
-                    .then(() => {
-                        setSuccess('성공적으로 제품이 추가되었습니다.');
-                        setTimeout(() => {
-                            setSuccess('');
-                        }, 4000)
-                    });
+                // addNewProduct(product, url)
+                //     .then(() => {
+                //         setSuccess('성공적으로 제품이 추가되었습니다.');
+                //         setTimeout(() => {
+                //             setSuccess('');
+                //         }, 4000)
+                //     });
             })
             .finally(() => {
                 setIsUploading(false);
@@ -46,8 +57,6 @@ function NewProduct() {
         <section className='w-full text-center'>
             <h2 className='text-2xl font-bold my-4'>New Product</h2>
 
-            {/* 성공메세지 */}
-            {success && <p className='my-2'>✅{success}</p>}
 
             {/* 첨부 이미지 미리보기 */}
             {file && (
@@ -58,6 +67,9 @@ function NewProduct() {
                 />
             )}
 
+            {/* 성공메세지 */}
+            {success && <p className='my-2'>✅{success}</p>}
+            
             {/* 제품 등록 폼 */}
             <form className='flex flex-col px-12' onSubmit={handleSubmit}>
                 <input 
