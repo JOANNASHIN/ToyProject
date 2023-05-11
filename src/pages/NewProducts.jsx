@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Button from '../components/ui/Button';
 import { uploadImage } from '../api/uploader';
-import { addNewProduct } from '../api/firebase';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+// import { addNewProduct } from '../api/firebase';
+// import { useMutation, useQueryClient } from '@tanstack/react-query';
+import useProducts from '../hooks/useProducts';
 
 function NewProduct() {
     const [product, setProduct] = useState({});
@@ -10,10 +11,13 @@ function NewProduct() {
     const [isUploading, setIsUploading] = useState(false);
     const [success, setSuccess] = useState('');
 
-    const queryClient = useQueryClient();
-    const addProduct = useMutation(({product, url}) => addNewProduct(product, url), {
-        onSuccess: () => queryClient.invalidateQueries(['products'])
-    });
+    // const queryClient = useQueryClient();
+    // const addProduct = useMutation(({product, url}) => addNewProduct(product, url), {
+    //     onSuccess: () => queryClient.invalidateQueries(['products'])
+    // });
+
+    //리팩토링
+    const { addProduct } = useProducts();
 
     const handleChange = (e) => {
         const {name, value, files} = e.target;
