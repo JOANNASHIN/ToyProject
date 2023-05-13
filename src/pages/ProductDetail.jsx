@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import Button from '../components/ui/Button';
-// import { useAuthContext } from '../context/AuthContext';
-// import { updateToCart } from '../api/firebase';
-import useCart from '../hooks/useCart';
+import { useLocation } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 import { login } from '../api/firebase';
+import Button from '../components/ui/Button';
+import useCart from '../hooks/useCart';
 
 export default function ProductDetail() {
+    const { user } = useAuthContext();
+
     /**
      * location 이동시에 받아오는 데이터 (productCard 참고)
      */
@@ -23,27 +23,36 @@ export default function ProductDetail() {
     const [selected, setSelected] = useState(options && options[0]);
 
     /**
+     * cart hooks
+     */
+    const { 
+        updateToCart
+    } = useCart();
+
+    /**
      * 옵션 선택 이벤트
      */
     const handleSelect = (e) => {
         setSelected(e.target.value);
     }
 
-    // const { uid } = useAuthContext();
-    const { 
-        updateToCart
-    } = useCart();
-
+    /**
+     * 장바구니 담기 성공 여부
+     */
     const [success, setSuccess] = useState();
-    const { user } = useAuthContext();
 
-    const handleClick = (e) => {
+    /**
+     * 장바구니 담기 이벤트
+     */
+    const handleCart = (e) => {
+        // 비로그인 체크
         if (!user) {
             const goToLogin = window.confirm('로그인 후 가능합니다.\n로그인 하시겠습니까?');
             if (goToLogin) login();
             return;
         }
 
+        // 넘길 데이터
         const product = {
             id,
             image,
@@ -53,7 +62,7 @@ export default function ProductDetail() {
             quantity: 1,
         }
         
-        //장바구니 추가
+        //장바구니 추가로직
         updateToCart.mutate(product, {
             onSuccess: () => {
                 setSuccess('장바구니에 추가되었습니다.');
@@ -87,7 +96,7 @@ export default function ProductDetail() {
                     </div>
                     
                     { success && <p className='my-2'>✅{success}</p>}
-                    <Button text='장바구니에 추가' onClick={handleClick}></Button>
+                    <Button text='장바구니에 추가' onClick={handleCart}></Button>
                 </div>
             </section>
         </>

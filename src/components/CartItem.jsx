@@ -1,7 +1,6 @@
 import React from 'react';
 import { RiDeleteBin5Fill } from 'react-icons/ri';
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
-// import { removeFromCart, updateToCart } from '../api/firebase';
 import useCart from '../hooks/useCart';
 
 const ICON_CLASS = 'transition-all cursor-pointer hover:text-brand hover:scale-105 mx-1';
@@ -9,7 +8,6 @@ const ICON_CLASS = 'transition-all cursor-pointer hover:text-brand hover:scale-1
 export default function CartItem({ 
     product,
     product: {id, image, title, option, quantity, price},
-    // uid
 }) {
     const {
         updateToCart,

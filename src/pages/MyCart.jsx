@@ -13,7 +13,7 @@ const SHIPPING = 3000;
 
 function MyCart() {
     const { uid } = useAuthContext();
-    // const { isLoading, data: products } = useQuery(['carts'], () => getCart(uid));
+    
     const {
         cartQuery: { isLoading, data: products }
     } = useCart();

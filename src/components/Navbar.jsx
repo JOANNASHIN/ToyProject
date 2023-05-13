@@ -1,19 +1,12 @@
 import { Link } from "react-router-dom";
-import { FiShoppingBag } from "react-icons/fi";
-// import { useEffect, useState } from "react";
-// import { login, logout, onUserStateChange } from '../api/firebase';
 import User from "./User";
 import Button from "./ui/Button";
-import { useAuthContext } from "../context/AuthContext";
 import CartStatus from "./CartStatus";
+import { FiShoppingBag } from "react-icons/fi";
+import { useAuthContext } from "../context/AuthContext";
 
 function Navbar () {
     const { user, login, logout } = useAuthContext();
-    // const [user, setUser] = useState();
-    
-    // useEffect(() => {
-    //     onUserStateChange(setUser);
-    // }, [])
 
     return (
         <header className="flex justify-between border-b border-gray-300 p-2">
