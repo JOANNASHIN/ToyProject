@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../components/ui/Button';
 import { uploadImage } from '../api/uploader';
-// import { addNewProduct } from '../api/firebase';
-// import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useProducts from '../hooks/useProducts';
 
 function NewProduct() {
@@ -10,13 +8,6 @@ function NewProduct() {
     const [file, setFile] = useState();
     const [isUploading, setIsUploading] = useState(false);
     const [success, setSuccess] = useState('');
-
-    // const queryClient = useQueryClient();
-    // const addProduct = useMutation(({product, url}) => addNewProduct(product, url), {
-    //     onSuccess: () => queryClient.invalidateQueries(['products'])
-    // });
-
-    //리팩토링
     const { addProduct } = useProducts();
 
     const handleChange = (e) => {
@@ -40,15 +31,6 @@ function NewProduct() {
                         setSuccess('');
                     }, 4000)
                 }})
-               
-                //firebase에 URL 추가
-                // addNewProduct(product, url)
-                //     .then(() => {
-                //         setSuccess('성공적으로 제품이 추가되었습니다.');
-                //         setTimeout(() => {
-                //             setSuccess('');
-                //         }, 4000)
-                //     });
             })
             .finally(() => {
                 setIsUploading(false);

@@ -1,33 +1,39 @@
 import React from 'react';
 import { RiDeleteBin5Fill } from 'react-icons/ri';
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai';
-import { removeFromCart, updateToCart } from '../api/firebase';
+// import { removeFromCart, updateToCart } from '../api/firebase';
+import useCart from '../hooks/useCart';
 
 const ICON_CLASS = 'transition-all cursor-pointer hover:text-brand hover:scale-105 mx-1';
 
 export default function CartItem({ 
     product,
     product: {id, image, title, option, quantity, price},
-    uid
+    // uid
 }) {
+    const {
+        updateToCart,
+        removeFromCart
+    } = useCart();
+
     const handleMinus = () => {
         if (quantity < 2) return;
 
-        updateToCart(uid, {
+        updateToCart.mutate({
             ...product,
             quantity: quantity - 1,
         })
     }
 
     const handlePlus = () => {
-        updateToCart(uid, {
+        updateToCart.mutate({
             ...product,
             quantity: quantity + 1,
         })
     }
 
     const handleDelete = () => {
-        removeFromCart(uid, id);
+        removeFromCart.mutate(id);
     }
 
     return (

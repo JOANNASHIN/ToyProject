@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import Button from '../components/ui/Button';
+// import { useAuthContext } from '../context/AuthContext';
+// import { updateToCart } from '../api/firebase';
+import useCart from '../hooks/useCart';
 import { useAuthContext } from '../context/AuthContext';
-import { updateToCart } from '../api/firebase';
+import { login } from '../api/firebase';
 
 export default function ProductDetail() {
     /**
@@ -26,8 +29,21 @@ export default function ProductDetail() {
         setSelected(e.target.value);
     }
 
-    const { uid } = useAuthContext();
+    // const { uid } = useAuthContext();
+    const { 
+        updateToCart
+    } = useCart();
+
+    const [success, setSuccess] = useState();
+    const { user } = useAuthContext();
+
     const handleClick = (e) => {
+        if (!user) {
+            const goToLogin = window.confirm('로그인 후 가능합니다.\n로그인 하시겠습니까?');
+            if (goToLogin) login();
+            return;
+        }
+
         const product = {
             id,
             image,
@@ -38,7 +54,12 @@ export default function ProductDetail() {
         }
         
         //장바구니 추가
-        updateToCart(uid, product);
+        updateToCart.mutate(product, {
+            onSuccess: () => {
+                setSuccess('장바구니에 추가되었습니다.');
+                setTimeout(() => setSuccess(''), 3000);
+            }
+        });
     }
 
     return (
@@ -65,6 +86,7 @@ export default function ProductDetail() {
                         </select>
                     </div>
                     
+                    { success && <p className='my-2'>✅{success}</p>}
                     <Button text='장바구니에 추가' onClick={handleClick}></Button>
                 </div>
             </section>
