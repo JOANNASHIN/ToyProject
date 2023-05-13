@@ -19,7 +19,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    errorElement: <AllProducts />,
+    errorElement: <NotFound />,
     children: [
       {
         index: true,
@@ -51,8 +51,6 @@ const router = createBrowserRouter([
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
-  </React.StrictMode>
+  <RouterProvider router={router}></RouterProvider>
 );
 
